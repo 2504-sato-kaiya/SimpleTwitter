@@ -38,6 +38,24 @@ public class SettingServlet extends HttpServlet {
 	}
 
 	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		log.info(new Object() {
+		}.getClass().getEnclosingClass().getName() +
+				" : " + new Object() {
+				}.getClass().getEnclosingMethod().getName());
+
+		HttpSession session = request.getSession();
+		User loginUser = (User) session.getAttribute("loginUser");
+
+		User user = new UserService().select(loginUser.getId());
+
+		request.setAttribute("user", user);
+		request.getRequestDispatcher("setting.jsp").forward(request, response);
+	}
+
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -119,4 +137,5 @@ public class SettingServlet extends HttpServlet {
 		}
 		return true;
 	}
+
 }
