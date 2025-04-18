@@ -42,12 +42,18 @@ public class TopServlet extends HttpServlet {
 	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
         " : " + new Object(){}.getClass().getEnclosingMethod().getName());
 
+
         boolean isShowMessageForm = false;
         User user = (User) request.getSession().getAttribute("loginUser");
         if (user != null) {
             isShowMessageForm = true;
         }
-
+        /*
+         * String型のuser_idの値をrequest.getParameter("user_id")で
+         * JSPから受け取るように設定
+         * MessageServiceのselectに引数としてString型のuser_idを追加
+         */
+        String userId = request.getParameter("user_id");
         List<UserMessage> messages = new MessageService().select();
 
         request.setAttribute("messages", messages);
