@@ -66,7 +66,7 @@ public class UserMessageDao {
 			//idがnull以外だったら、値をsetする
 			if (id != null) {
 
-			ps.setInt(1, id);
+				ps.setInt(1, id);
 
 			}
 
