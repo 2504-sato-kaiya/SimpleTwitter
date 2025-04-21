@@ -38,11 +38,10 @@ public class UserMessageDao {
 		}.getClass().getEnclosingClass().getName() +
 				" : " + new Object() {
 				}.getClass().getEnclosingMethod().getName());
-
 		PreparedStatement ps = null;
 		try {
-			StringBuilder sql = new StringBuilder();
 
+			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT ");
 			sql.append("    messages.id as id, ");
 			sql.append("    messages.text as text, ");
@@ -53,31 +52,38 @@ public class UserMessageDao {
 			sql.append("FROM messages ");
 			sql.append("INNER JOIN users ");
 			sql.append("ON messages.user_id = users.id ");
+			//idがnullだったら何もしない
+			//idがnull以外だったら、バインド変数を準備する
+			if (id != null) {
 
-			if (id == null) {
-
-				//idがnullだったら全件取得する
-				sql.append("ORDER BY created_date DESC limit " + num);
-
-			} else {
-
-				//idがnull以外だったら、その値に対応するユーザーIDの投稿を取得する
-				sql.append("WHERE users.id = " + id + " ");
-				sql.append("ORDER BY created_date DESC limit " + num);
+				sql.append("WHERE users.id = ? ");
 
 			}
 
+			sql.append("ORDER BY created_date DESC limit " + num);
 			ps = connection.prepareStatement(sql.toString());
-			ResultSet rs = ps.executeQuery();
+			//idがnullだったら何もしない
+			//idがnull以外だったら、値をsetする
+			if (id != null) {
 
+			ps.setInt(1, id);
+
+			}
+
+			ResultSet rs = ps.executeQuery();
 			List<UserMessage> messages = toUserMessages(rs);
 			return messages;
+
 		} catch (SQLException e) {
+
 			log.log(Level.SEVERE, new Object() {
 			}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
 			throw new SQLRuntimeException(e);
+
 		} finally {
+
 			close(ps);
+
 		}
 	}
 
