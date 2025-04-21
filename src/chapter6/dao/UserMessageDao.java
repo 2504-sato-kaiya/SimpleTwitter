@@ -32,7 +32,7 @@ public class UserMessageDao {
 
 	}
 
-	public List<UserMessage> select(Connection connection, int num) {
+	public List<UserMessage> select(Connection connection, Integer id, int num) {
 
 		log.info(new Object() {
 		}.getClass().getEnclosingClass().getName() +
@@ -42,6 +42,7 @@ public class UserMessageDao {
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
+
 			sql.append("SELECT ");
 			sql.append("    messages.id as id, ");
 			sql.append("    messages.text as text, ");
@@ -52,10 +53,21 @@ public class UserMessageDao {
 			sql.append("FROM messages ");
 			sql.append("INNER JOIN users ");
 			sql.append("ON messages.user_id = users.id ");
-			sql.append("ORDER BY created_date DESC limit " + num);
+
+			if (id == null) {
+
+				//idがnullだったら全件取得する
+				sql.append("ORDER BY created_date DESC limit " + num);
+
+			} else {
+
+				//idがnull以外だったら、その値に対応するユーザーIDの投稿を取得する
+				sql.append("WHERE users.id = " + id + " ");
+				sql.append("ORDER BY created_date DESC limit " + num);
+
+			}
 
 			ps = connection.prepareStatement(sql.toString());
-
 			ResultSet rs = ps.executeQuery();
 
 			List<UserMessage> messages = toUserMessages(rs);
