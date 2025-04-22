@@ -80,10 +80,18 @@
 					<div class="date">
 						<fmt:formatDate value="${message.createdDate}"
 							pattern="yyyy/MM/dd HH:mm:ss" />
+					<div class="delete-message">			
+						<input type="submit" value="削除">
+					</div>
 					</div>
 				</div>
 			</c:forEach>
 		</div>
+
+		<c:if test="${ not empty loginUser }">
+
+		</c:if>
+
 		<div class="copyright">Copyright(c)Sato Kaiya</div>
 	</div>
 </body>
