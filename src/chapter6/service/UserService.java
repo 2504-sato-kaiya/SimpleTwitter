@@ -141,6 +141,29 @@ public class UserService {
 		}
 	}
 
+	/*
+	 * String型の引数をもつ、selectメソッドを追加する
+	 */
+	public User select(String account) {
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+			User user = new UserDao().select(connection, account);
+			commit(connection);
+
+			return user;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
+
 	public void update(User user) {
 
 		log.info(new Object() {
@@ -150,7 +173,7 @@ public class UserService {
 		Connection connection = null;
 		try {
 			// パスワードの入力があった場合、暗号化する
-			if (!StringUtils.isBlank(user.getPassword())){
+			if (!StringUtils.isBlank(user.getPassword())) {
 
 				// パスワード暗号化
 				String encPassword = CipherUtil.encrypt(user.getPassword());

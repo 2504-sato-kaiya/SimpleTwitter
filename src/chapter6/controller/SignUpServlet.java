@@ -76,11 +76,13 @@ public class SignUpServlet extends HttpServlet {
 				}.getClass().getEnclosingMethod().getName());
 
 		User user = new User();
+
 		user.setName(request.getParameter("name"));
 		user.setAccount(request.getParameter("account"));
 		user.setPassword(request.getParameter("password"));
 		user.setEmail(request.getParameter("email"));
 		user.setDescription(request.getParameter("description"));
+
 		return user;
 	}
 
@@ -102,6 +104,7 @@ public class SignUpServlet extends HttpServlet {
 
 		if (StringUtils.isEmpty(account)) {
 			errorMessages.add("アカウント名を入力してください");
+
 		} else if (20 < account.length()) {
 			errorMessages.add("アカウント名は20文字以下で入力してください");
 		}
@@ -112,6 +115,11 @@ public class SignUpServlet extends HttpServlet {
 
 		if (!StringUtils.isEmpty(email) && (50 < email.length())) {
 			errorMessages.add("メールアドレスは50文字以下で入力してください");
+		}
+
+		//accountがnull以外の時、エラー表示
+		if (new UserService().select(account) != null) {
+			errorMessages.add("ユーザーが重複しています");
 		}
 
 		if (errorMessages.size() != 0) {

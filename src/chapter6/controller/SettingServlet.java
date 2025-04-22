@@ -134,6 +134,11 @@ public class SettingServlet extends HttpServlet {
 			errorMessages.add("メールアドレスは50文字以下で入力してください");
 		}
 
+		//accountがnull以外の時、エラー表示
+		if (new UserService().select(account) != null) {
+			errorMessages.add("ユーザーが重複しています");
+		}
+
 		if (errorMessages.size() != 0) {
 			return false;
 		}
