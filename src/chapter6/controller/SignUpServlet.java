@@ -119,7 +119,7 @@ public class SignUpServlet extends HttpServlet {
 
 		//accountがnull以外の時、エラー表示
 		if (new UserService().select(account) != null) {
-			errorMessages.add("ユーザーが重複しています");
+			errorMessages.add("すでに存在するアカウントです");
 		}
 
 		if (errorMessages.size() != 0) {
