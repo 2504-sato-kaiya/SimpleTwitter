@@ -67,6 +67,7 @@
 		<div class="messages">
 			<c:forEach items="${messages}" var="message">
 				<div class="message">
+
 					<div class="account-name">
 						<span class="account">
 							<a href="./?user_id=<c:out value="${message.userId}"/> ">
@@ -80,17 +81,22 @@
 					<div class="date">
 						<fmt:formatDate value="${message.createdDate}"
 							pattern="yyyy/MM/dd HH:mm:ss" />
-					<div class="delete-message">			
-						<input type="submit" value="削除">
 					</div>
-					</div>
+					<c:if test="${loginUser.id == message.userId}">
+						<div class="editMessage-area">
+							<form action="edit" method="get">
+								<input type="submit" value="編集">
+								<input type="hidden" name="editid" value="${message.id}">
+							</form>
+							<form action="deleteMessage" method="post">
+								<input type="submit" value="削除">
+								<input type="hidden" name="deleteid" value="${message.id}">
+							</form>
+						</div>
+					</c:if>
 				</div>
 			</c:forEach>
 		</div>
-
-		<c:if test="${ not empty loginUser }">
-
-		</c:if>
 
 		<div class="copyright">Copyright(c)Sato Kaiya</div>
 	</div>
