@@ -45,24 +45,46 @@ public class EditServlet extends HttpServlet {
 				" : " + new Object() {
 				}.getClass().getEnclosingMethod().getName());
 		HttpSession session = request.getSession();
-
-		Message editMessage = new Message();
-		int editId = editMessage.getId();
-		String strEditId = Integer.toString(editId);
+		//top.jspからeditidを取得
+		String editStrId = request.getParameter("editid");
 
 		List<String> errorMessages = new ArrayList<String>();
-		//URL部分の不正判定
-		if (!isEditIdValid(strEditId, errorMessages)) {
+
+		//URL部分の空白判定
+		if (StringUtils.isEmpty(editStrId)) {
+
+			errorMessages.add("不正なパラメータが入力されました");
 			session.setAttribute("errorMessages", errorMessages);
 			response.sendRedirect("./");
 			return;
+
 		}
-		//messagesのidを取得
-		String messageId = request.getParameter("editid");
-		int id = Integer.parseInt(messageId);
-		//message内容を取得
-		Message message = new MessageService().select(id);
-		//edit.jspにforward
+
+		//URL部分の不正判定
+		if (!editStrId.matches("^[0-9]+$")) {
+
+			errorMessages.add("不正なパラメータが入力されました");
+			session.setAttribute("errorMessages", errorMessages);
+			response.sendRedirect("./");
+			return;
+
+		}
+
+		//int型に変換
+		int editId = Integer.parseInt(editStrId);
+		//編集したいidのmessage内容を取得
+		Message message = new MessageService().select(editId);
+		//idが存在するか確認
+		if(message == null) {
+
+			errorMessages.add("不正なパラメータが入力されました");
+			session.setAttribute("errorMessages", errorMessages);
+			response.sendRedirect("./");
+			return;
+
+		}
+
+		//edit.jspにforwardして返す
 		request.setAttribute("message", message);
 		request.getRequestDispatcher("edit.jsp").forward(request, response);
 
@@ -80,16 +102,21 @@ public class EditServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		List<String> errorMessages = new ArrayList<String>();
 
+		//jspからtextを取得
 		String text = request.getParameter("text");
+		//jspからidを取得
+		String messageId = request.getParameter("editid");
+		//140文字以下か判定
 		if (!isValid(text, errorMessages)) {
 			session.setAttribute("errorMessages", errorMessages);
-			response.sendRedirect("edit.jsp");
+			Message message = new Message();
+			message.setText(text);
+			session.setAttribute("message", message);
+			request.getRequestDispatcher("edit.jsp").forward(request, response);
 			return;
 		}
 
-		String messageId = request.getParameter("editid");
 		int id = Integer.parseInt(messageId);
-
 		new MessageService().update(text,id);
 		response.sendRedirect("./");
 	}
@@ -108,23 +135,6 @@ public class EditServlet extends HttpServlet {
 		}
 
 		if (errorMessages.size() != 0) {
-			return false;
-		}
-		return true;
-	}
-
-	private boolean isEditIdValid(String strEditId, List<String> errorMessages) {
-
-		log.info(new Object() {
-		}.getClass().getEnclosingClass().getName() +
-				" : " + new Object() {
-				}.getClass().getEnclosingMethod().getName());
-
-		if (strEditId != "^\\d{n}$") {
-			errorMessages.add("不正なパラメータが入力されました");
-		}
-
-		if (strEditId == "^\\d{n}$") {
 			return false;
 		}
 		return true;

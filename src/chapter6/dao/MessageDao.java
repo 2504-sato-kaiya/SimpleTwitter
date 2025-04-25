@@ -83,9 +83,15 @@ public class MessageDao {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			List<Message> messages = toMessages(rs);
+			if (messages.isEmpty()) {
+
+				return null;
+
+			}else {
 
 			return messages.get(0);
 
+			}
 		} catch (SQLException e) {
 
 			log.log(Level.SEVERE, new Object() {
