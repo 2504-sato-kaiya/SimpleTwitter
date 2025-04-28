@@ -87,9 +87,9 @@ public class MessageDao {
 
 				return null;
 
-			}else {
+			} else {
 
-			return messages.get(0);
+				return messages.get(0);
 
 			}
 		} catch (SQLException e) {
@@ -131,7 +131,7 @@ public class MessageDao {
 		}
 	}
 
-	public void update(Connection connection, String text, int id) {
+	public void update(Connection connection, Message message) {
 
 		log.info(new Object() {
 		}.getClass().getEnclosingClass().getName() +
@@ -147,8 +147,8 @@ public class MessageDao {
 			sql.append("    updated_date = CURRENT_TIMESTAMP ");
 			sql.append("WHERE id = ?");
 			ps = connection.prepareStatement(sql.toString());
-			ps.setString(1, text);
-			ps.setInt(2, id);
+			ps.setString(1, message.getText());
+			ps.setInt(2, message.getId());
 			ps.executeUpdate();
 
 		} catch (SQLException e) {
@@ -164,7 +164,7 @@ public class MessageDao {
 		}
 	}
 
-	public void delete(Connection connection, Message message) {
+	public void delete(Connection connection, int id) {
 
 		log.info(new Object() {
 		}.getClass().getEnclosingClass().getName() +
@@ -176,7 +176,7 @@ public class MessageDao {
 			//messagesテーブルにMySQLのDELETEをidを指定して実行
 			String sql = "DELETE FROM messages WHERE id = ? ";
 			ps = connection.prepareStatement(sql.toString());
-			ps.setInt(1, message.getId());
+			ps.setInt(1, id);
 			ps.executeUpdate();
 
 		} catch (SQLException e) {

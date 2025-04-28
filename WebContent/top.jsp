@@ -86,11 +86,11 @@
 						<div class="editMessage-area">
 							<form action="edit" method="get">
 								<input type="submit" value="編集">
-								<input type="hidden" name="editid" value="${message.id}">
+								<input type="hidden" name="editId" value="${message.id}">
 							</form>
 							<form action="deleteMessage" method="post">
 								<input type="submit" value="削除">
-								<input type="hidden" name="deleteid" value="${message.id}">
+								<input type="hidden" name="deleteId" value="${message.id}">
 							</form>
 						</div>
 					</c:if>

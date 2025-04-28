@@ -44,7 +44,7 @@ public class SignUpServlet extends HttpServlet {
 				" : " + new Object() {
 				}.getClass().getEnclosingMethod().getName());
 
-		request.getRequestDispatcher("signup.jsp").forward(request, response);
+		request.getRequestDispatcher("./signup.jsp").forward(request, response);
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class SignUpServlet extends HttpServlet {
 		User user = getUser(request);
 		if (!isValid(user, errorMessages)) {
 			request.setAttribute("errorMessages", errorMessages);
-			request.getRequestDispatcher("signup.jsp").forward(request, response);
+			request.getRequestDispatcher("./signup.jsp").forward(request, response);
 			return;
 		}
 		new UserService().insert(user);

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 
 import chapter6.beans.Message;
+import chapter6.beans.User;
 import chapter6.logging.InitApplication;
 import chapter6.service.MessageService;
 
@@ -45,38 +46,49 @@ public class EditServlet extends HttpServlet {
 				" : " + new Object() {
 				}.getClass().getEnclosingMethod().getName());
 		HttpSession session = request.getSession();
-		//top.jspからeditidを取得
-		String editStrId = request.getParameter("editid");
 
+		//top.jspからeditidを取得
+		String strEditId = request.getParameter("editId");
+
+		//top.jspからloginUserのidを取得
+		User user = (User) request.getSession().getAttribute("loginUser");
+
+		//loginUserのidをget
+		int intUserId = user.getId();
+		//String型に変換
+		String userId = Integer.toString(intUserId);
+
+		//変数宣言
+		Message message = null;
+		String messageUserId = null;
 		List<String> errorMessages = new ArrayList<String>();
 
-		//URL部分の空白判定
-		if (StringUtils.isEmpty(editStrId)) {
+		//URL=id部分の空白、スペース、数字以外判定
+		if (!StringUtils.isBlank(strEditId) && strEditId.matches("^[0-9]+$")) {
 
-			errorMessages.add("不正なパラメータが入力されました");
-			session.setAttribute("errorMessages", errorMessages);
-			response.sendRedirect("./");
-			return;
-
-		}
-
-		//URL部分の不正判定
-		if (!editStrId.matches("^[0-9]+$")) {
-
-			errorMessages.add("不正なパラメータが入力されました");
-			session.setAttribute("errorMessages", errorMessages);
-			response.sendRedirect("./");
-			return;
+			//int型に変換
+			int editId = Integer.parseInt(strEditId);
+			//編集したいidのmessage内容とuserIdを取得
+			message = new MessageService().select(editId);
 
 		}
 
-		//int型に変換
-		int editId = Integer.parseInt(editStrId);
-		//編集したいidのmessage内容を取得
-		Message message = new MessageService().select(editId);
 		//idが存在するか確認
-		if(message == null) {
+		if (message != null) {
+			//存在したらmessageのuser_idをget
+			int intMessageUserId = message.getUserId();
+			//String型に変換
+			messageUserId = Integer.toString(intMessageUserId);
 
+		}
+
+		//コーチに確認しuseridをjspから取得しようとしましたが、
+		//打鍵テストの「URLにつぶやきのID以外の情報が含まれていないこと」の
+		//条件に違反してしまうためif文をidが存在した場合に処理することにしました。
+		//loginuserのidとmessageのuser_idが一致するか確認
+		if (!userId.equals(messageUserId)) {
+
+			//エラーメッセージを出力
 			errorMessages.add("不正なパラメータが入力されました");
 			session.setAttribute("errorMessages", errorMessages);
 			response.sendRedirect("./");
@@ -86,7 +98,7 @@ public class EditServlet extends HttpServlet {
 
 		//edit.jspにforwardして返す
 		request.setAttribute("message", message);
-		request.getRequestDispatcher("edit.jsp").forward(request, response);
+		request.getRequestDispatcher("./edit.jsp").forward(request, response);
 
 	}
 
@@ -101,24 +113,30 @@ public class EditServlet extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		List<String> errorMessages = new ArrayList<String>();
+		Message editMessage = new Message();
 
 		//jspからtextを取得
 		String text = request.getParameter("text");
+		editMessage.setText(text);
 		//jspからidを取得
-		String messageId = request.getParameter("editid");
+		String strId = request.getParameter("editId");
+		int id = Integer.parseInt(strId);
+		editMessage.setId(id);
 		//140文字以下か判定
 		if (!isValid(text, errorMessages)) {
+
 			session.setAttribute("errorMessages", errorMessages);
 			Message message = new Message();
 			message.setText(text);
 			session.setAttribute("message", message);
-			request.getRequestDispatcher("edit.jsp").forward(request, response);
+			request.getRequestDispatcher("./edit.jsp").forward(request, response);
 			return;
+
 		}
 
-		int id = Integer.parseInt(messageId);
-		new MessageService().update(text,id);
+		new MessageService().update(editMessage);
 		response.sendRedirect("./");
+
 	}
 
 	private boolean isValid(String text, List<String> errorMessages) {
