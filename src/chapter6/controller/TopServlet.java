@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import chapter6.beans.User;
 import chapter6.beans.UserComment;
@@ -64,8 +65,12 @@ public class TopServlet extends HttpServlet {
 		List<UserMessage> messages = new MessageService().select(userId,startDate,endDate);
 		List<UserComment> comments = new CommentService().select();
 
+		HttpSession session = request.getSession();
+		session.removeAttribute("errorMessages");
 		request.setAttribute("messages", messages);
 		request.setAttribute("comments", comments);
+		request.setAttribute("startDate", startDate);
+		request.setAttribute("endDate", endDate);
 		request.setAttribute("isShowMessageForm", isShowMessageForm);
 		request.getRequestDispatcher("/top.jsp").forward(request, response);
 	}

@@ -33,7 +33,7 @@ public class LoginFilter implements Filter {
 			List<String> errorMessages = new ArrayList<String>();
 			errorMessages.add("ログインしてください");
 			session.setAttribute("errorMessages", errorMessages);
-			((HttpServletResponse) response).sendRedirect("./login.jsp");
+			((HttpServletResponse) response).sendRedirect("login.jsp");
 
 		}
 	}

@@ -66,7 +66,8 @@
 
 		<div class="form-area">
 			<form action="./" method="get">
-				日付：<input type="date" name="startDate">～<input type="date" name="endDate">
+				日付：<input type="date" name="startDate" value="${startDate}">～
+				<input type="date" name="endDate" value="${endDate}">
 				<input type="submit" value="絞込">
 			</form>
 		</div>
