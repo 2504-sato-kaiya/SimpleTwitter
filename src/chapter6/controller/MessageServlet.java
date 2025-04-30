@@ -52,7 +52,7 @@ public class MessageServlet extends HttpServlet {
 		String text = request.getParameter("text");
 		if (!isValid(text, errorMessages)) {
 			session.setAttribute("errorMessages", errorMessages);
-			response.sendRedirect("./top.jsp");
+			response.sendRedirect("./");
 			return;
 		}
 
@@ -63,7 +63,7 @@ public class MessageServlet extends HttpServlet {
 		message.setUserId(user.getId());
 
 		new MessageService().insert(message);
-		response.sendRedirect("./top.jsp");
+		response.sendRedirect("./");
 	}
 
 	private boolean isValid(String text, List<String> errorMessages) {

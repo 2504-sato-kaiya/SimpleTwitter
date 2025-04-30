@@ -41,7 +41,7 @@ public class DeleteMessageServlet extends HttpServlet {
 		String strId = request.getParameter("deleteId");
 		int id = Integer.parseInt(strId);
 		new MessageService().delete(id);
-		response.sendRedirect("./top.jsp");
+		response.sendRedirect("./");
 
 	}
 }

@@ -32,13 +32,15 @@ public class UserMessageDao {
 
 	}
 
-	public List<UserMessage> select(Connection connection, Integer id, int num) {
+	public List<UserMessage> select(Connection connection, Integer id, int num,
+			String startDate, String endDate) {
 
 		log.info(new Object() {
 		}.getClass().getEnclosingClass().getName() +
 				" : " + new Object() {
 				}.getClass().getEnclosingMethod().getName());
 		PreparedStatement ps = null;
+
 		try {
 
 			StringBuilder sql = new StringBuilder();
@@ -52,21 +54,30 @@ public class UserMessageDao {
 			sql.append("FROM messages ");
 			sql.append("INNER JOIN users ");
 			sql.append("ON messages.user_id = users.id ");
-			//idがnullだったら何もしない
 			//idがnull以外だったら、バインド変数を準備する
 			if (id != null) {
 
 				sql.append("WHERE users.id = ? ");
 
+			//idがnullだったら、created_dateのバインド変数を準備する
+			}else {
+
+				sql.append("WHERE messages.created_date BETWEEN ? AND ? ");
+
 			}
 
 			sql.append("ORDER BY created_date DESC limit " + num);
 			ps = connection.prepareStatement(sql.toString());
-			//idがnullだったら何もしない
 			//idがnull以外だったら、値をsetする
 			if (id != null) {
 
 				ps.setInt(1, id);
+
+			//idがnullだったら、created_dateのバインド変数を準備する
+			}else {
+
+				ps.setString(1, startDate);
+				ps.setString(2, endDate);
 
 			}
 

@@ -70,6 +70,6 @@ public class LoginServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		session.removeAttribute("errorMessages");
 		session.setAttribute("loginUser", user);
-		response.sendRedirect("./top.jsp");
+		response.sendRedirect("./");
 	}
 }

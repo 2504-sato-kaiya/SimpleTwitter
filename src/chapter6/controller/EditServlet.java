@@ -89,7 +89,7 @@ public class EditServlet extends HttpServlet {
 			//エラーメッセージを出力
 			errorMessages.add("不正なパラメータが入力されました");
 			session.setAttribute("errorMessages", errorMessages);
-			response.sendRedirect("./top.jsp");
+			response.sendRedirect("./");
 			return;
 
 		}
@@ -133,7 +133,7 @@ public class EditServlet extends HttpServlet {
 		}
 
 		new MessageService().update(editMessage);
-		response.sendRedirect("./top.jsp");
+		response.sendRedirect("./");
 
 	}
 

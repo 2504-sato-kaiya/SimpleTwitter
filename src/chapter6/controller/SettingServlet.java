@@ -107,7 +107,7 @@ public class SettingServlet extends HttpServlet {
 		}
 
 		session.setAttribute("loginUser", user);
-		response.sendRedirect("./top.jsp");
+		response.sendRedirect("./");
 
 	}
 

@@ -56,7 +56,7 @@ public class CommentServlet extends HttpServlet  {
 		if (!isValid(text, errorMessages)) {
 
 			session.setAttribute("errorMessages", errorMessages);
-			response.sendRedirect("./top.jsp");
+			response.sendRedirect("./");
 			return;
 
 		}
@@ -77,7 +77,7 @@ public class CommentServlet extends HttpServlet  {
 		comment.setUserId(user.getId());
 
 		new CommentService().insert(comment);
-		response.sendRedirect("./top.jsp");
+		response.sendRedirect("./");
 
 	}
 

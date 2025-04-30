@@ -65,7 +65,7 @@ public class SignUpServlet extends HttpServlet {
 			return;
 		}
 		new UserService().insert(user);
-		response.sendRedirect("./top.jsp");
+		response.sendRedirect("./");
 	}
 
 	private User getUser(HttpServletRequest request) throws IOException, ServletException {

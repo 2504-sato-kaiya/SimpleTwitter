@@ -65,8 +65,16 @@
 		</c:if>
 
 		<div class="form-area">
+			<form action="./" method="get">
+				日付：<input type="date" name="startDate">～<input type="date" name="endDate">
+				<input type="submit" value="絞込">
+			</form>
+		</div>
+
+		<div class="form-area">
 			<c:if test="${ isShowMessageForm }">
-				<form action="message" method="post">いま、どうしてる？
+				<form action="message" method="post">
+					<br />いま、どうしてる？
 					<br />
 					<textarea name="text" cols="100" rows="5" class="tweet-box"></textarea>
 

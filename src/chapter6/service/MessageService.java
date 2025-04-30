@@ -4,6 +4,8 @@ import static chapter6.utils.CloseableUtil.*;
 import static chapter6.utils.DBUtil.*;
 
 import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,7 +65,7 @@ public class MessageService {
 	/*
 	* selectの引数にString型のuserIdを追加
 	*/
-	public List<UserMessage> select(String userId) {
+	public List<UserMessage> select(String userId, String startDate, String endDate) {
 		final int LIMIT_NUM = 1000;
 
 		log.info(new Object() {
@@ -79,6 +81,29 @@ public class MessageService {
 		Connection connection = null;
 		try {
 			connection = getConnection();
+			String startDateAndTime = null;
+			String endDateAndTime = null;
+			//開始日時が指定されているとき、時間情報を足す
+			if(!StringUtils.isBlank(startDate)) {
+				startDateAndTime = startDate + " 00:00:00";
+
+			//指定されていないとき、デフォルト値を指定
+			}else {
+				startDateAndTime ="2020-01-01 00:00:00";
+			}
+
+			//現在時刻を取得
+			Date nowDate = new Date();
+			//日付の形式を指定
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			//終了日時が指定されているとき、時間情報を足す
+			if(!StringUtils.isBlank(endDate)) {
+				endDateAndTime = endDate + " 23:59:59";
+
+			//指定されていないとき、デフォルト値を指定
+			}else {
+				endDateAndTime = dateFormat.format(nowDate);
+			}
 
 			/*
 			* idがnullだったら全件取得する
@@ -92,7 +117,7 @@ public class MessageService {
 			/*
 			* messageDao.selectに引数としてInteger型のidを追加
 			*/
-			List<UserMessage> messages = new UserMessageDao().select(connection, id, LIMIT_NUM);
+			List<UserMessage> messages = new UserMessageDao().select(connection, id, LIMIT_NUM, startDateAndTime, endDateAndTime);
 			commit(connection);
 
 			return messages;
