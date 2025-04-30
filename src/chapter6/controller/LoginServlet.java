@@ -43,7 +43,7 @@ public class LoginServlet extends HttpServlet {
 				" : " + new Object() {
 				}.getClass().getEnclosingMethod().getName());
 
-		request.getRequestDispatcher("./login.jsp").forward(request, response);
+		request.getRequestDispatcher("login.jsp").forward(request, response);
 	}
 
 	@Override
@@ -68,7 +68,8 @@ public class LoginServlet extends HttpServlet {
 		}
 
 		HttpSession session = request.getSession();
+		session.removeAttribute("errorMessages");
 		session.setAttribute("loginUser", user);
-		response.sendRedirect("./");
+		response.sendRedirect("./top.jsp");
 	}
 }

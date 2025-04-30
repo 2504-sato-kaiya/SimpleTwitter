@@ -44,6 +44,6 @@ public class LogoutServlet extends HttpServlet {
 
 		// セッションの無効化
 		session.invalidate();
-		response.sendRedirect("./");
+		response.sendRedirect("./top.jsp");
 	}
 }

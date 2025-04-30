@@ -50,10 +50,8 @@ public class EditServlet extends HttpServlet {
 		//top.jspからeditidを取得
 		String strEditId = request.getParameter("editId");
 
-		//top.jspからloginUserのidを取得
-		User user = (User) request.getSession().getAttribute("loginUser");
-
 		//loginUserのidをget
+		User user = (User) request.getSession().getAttribute("loginUser");
 		int intUserId = user.getId();
 		//String型に変換
 		String userId = Integer.toString(intUserId);
@@ -91,14 +89,14 @@ public class EditServlet extends HttpServlet {
 			//エラーメッセージを出力
 			errorMessages.add("不正なパラメータが入力されました");
 			session.setAttribute("errorMessages", errorMessages);
-			response.sendRedirect("./");
+			response.sendRedirect("./top.jsp");
 			return;
 
 		}
 
 		//edit.jspにforwardして返す
 		request.setAttribute("message", message);
-		request.getRequestDispatcher("./edit.jsp").forward(request, response);
+		request.getRequestDispatcher("edit.jsp").forward(request, response);
 
 	}
 
@@ -129,13 +127,13 @@ public class EditServlet extends HttpServlet {
 			Message message = new Message();
 			message.setText(text);
 			session.setAttribute("message", message);
-			request.getRequestDispatcher("./edit.jsp").forward(request, response);
+			request.getRequestDispatcher("edit.jsp").forward(request, response);
 			return;
 
 		}
 
 		new MessageService().update(editMessage);
-		response.sendRedirect("./");
+		response.sendRedirect("./top.jsp");
 
 	}
 

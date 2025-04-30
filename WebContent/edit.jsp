@@ -13,31 +13,41 @@
 </head>
 <body>
 	<div class="main-contents">
+
 		<div class="header">
-			<a href="./">ホーム</a>
-			<a href="setting">設定</a>
-			<a href="logout">ログアウト</a>
+			<a href="./">ホーム
+			</a>
+			<a href="setting">設定
+			</a>
+			<a href="logout">ログアウト
+			</a>
 		</div>
 
 		<c:if test="${ not empty errorMessages }">
 			<div class="errorMessages">
 				<ul>
 					<c:forEach items="${errorMessages}" var="errorMessage">
-						<li><c:out value="${errorMessage}" />
+						<li>
+						<c:out value="${errorMessage}" />
 					</c:forEach>
 				</ul>
 			</div>
 			<c:remove var="errorMessages" scope="session" />
 		</c:if>
 
-		<form action="edit" method="post">
-			つぶやき<br />
+		<form action="edit" method="post">つぶやき
+
+			<br />
 			<textarea name="text" cols="100" rows="5" class="tweet-box"><c:out value="${message.text}" /></textarea>
+
 			<br />
 			<input type="submit" value="更新">
 			<input type="hidden" name="editId" value="${message.id}">
+
 			<br />
-			<a href="./">戻る</a>
+			<a href="./">戻る
+			</a>
+
 		</form>
 
 		<div class="copyright">Copyright(c)Sato Kaiya</div>

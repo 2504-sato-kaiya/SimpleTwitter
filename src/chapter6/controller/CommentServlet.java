@@ -14,13 +14,13 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
-import chapter6.beans.Message;
+import chapter6.beans.Comment;
 import chapter6.beans.User;
 import chapter6.logging.InitApplication;
-import chapter6.service.MessageService;
+import chapter6.service.CommentService;
 
-@WebServlet(urlPatterns = { "/message" })
-public class MessageServlet extends HttpServlet {
+@WebServlet(urlPatterns = { "/comment" })
+public class CommentServlet extends HttpServlet  {
 
 	/**
 	* ロガーインスタンスの生成
@@ -31,7 +31,7 @@ public class MessageServlet extends HttpServlet {
 	* デフォルトコンストラクタ
 	* アプリケーションの初期化を実施する。
 	*/
-	public MessageServlet() {
+	public CommentServlet() {
 		InitApplication application = InitApplication.getInstance();
 		application.init();
 
@@ -49,21 +49,36 @@ public class MessageServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		List<String> errorMessages = new ArrayList<String>();
 
-		String text = request.getParameter("text");
+		//jspからtextを取得
+		String text = request.getParameter("commentText");
+
+		//140文字以下か判定
 		if (!isValid(text, errorMessages)) {
+
 			session.setAttribute("errorMessages", errorMessages);
 			response.sendRedirect("./top.jsp");
 			return;
+
 		}
 
-		Message message = new Message();
-		message.setText(text);
-
+		//Comment型の変数を宣言
+		Comment comment = new Comment();
+		//commentにtextをset
+		comment.setText(text);
+		//jspからidを取得
+		String strMessageId = request.getParameter("commentId");
+		//intに型変換
+		int messageId = Integer.parseInt(strMessageId);
+		//commentにmessageIdをset
+		comment.setMessageId(messageId);
+		//jspからloginUserを取得
 		User user = (User) session.getAttribute("loginUser");
-		message.setUserId(user.getId());
+		//commentにuserIdをset
+		comment.setUserId(user.getId());
 
-		new MessageService().insert(message);
+		new CommentService().insert(comment);
 		response.sendRedirect("./top.jsp");
+
 	}
 
 	private boolean isValid(String text, List<String> errorMessages) {

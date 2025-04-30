@@ -52,7 +52,7 @@ public class SettingServlet extends HttpServlet {
 		User user = new UserService().select(loginUser.getId());
 
 		request.setAttribute("user", user);
-		request.getRequestDispatcher("./setting.jsp").forward(request, response);
+		request.getRequestDispatcher("setting.jsp").forward(request, response);
 
 	}
 
@@ -101,13 +101,13 @@ public class SettingServlet extends HttpServlet {
 
 			request.setAttribute("errorMessages", errorMessages);
 			request.setAttribute("user", user);
-			request.getRequestDispatcher("./setting.jsp").forward(request, response);
+			request.getRequestDispatcher("setting.jsp").forward(request, response);
 			return;
 
 		}
 
 		session.setAttribute("loginUser", user);
-		response.sendRedirect("./");
+		response.sendRedirect("./top.jsp");
 
 	}
 
