@@ -127,7 +127,7 @@
 						</div>
 					</c:if>
 
-					<div class="messages">
+					<div class="comment">
 						<c:forEach items="${comments}" var="comment">
 							<c:if test="${message.id == comment.messageId}">
 
@@ -146,8 +146,7 @@
 								</div>
 
 								<div class="comment-text">
-									<pre><c:out value="${comment.text}" />
-									</pre>
+									<pre><c:out value="${comment.text}" /></pre>
 								</div>
 
 								<div class="comment-date">

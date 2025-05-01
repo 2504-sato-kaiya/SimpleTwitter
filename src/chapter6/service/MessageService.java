@@ -86,7 +86,6 @@ public class MessageService {
 			//開始日時が指定されているとき、時間情報を足す
 			if(!StringUtils.isBlank(startDate)) {
 				startDateAndTime = startDate + " 00:00:00";
-
 			//指定されていないとき、デフォルト値を指定
 			}else {
 				startDateAndTime ="2020-01-01 00:00:00";
@@ -99,7 +98,6 @@ public class MessageService {
 			//終了日時が指定されているとき、時間情報を足す
 			if(!StringUtils.isBlank(endDate)) {
 				endDateAndTime = endDate + " 23:59:59";
-
 			//指定されていないとき、デフォルト値を指定
 			}else {
 				endDateAndTime = dateFormat.format(nowDate);
