@@ -21,15 +21,15 @@ public class CommentService {
 	*/
 	Logger log = Logger.getLogger("twitter");
 
-/**
-* デフォルトコンストラクタ
-* アプリケーションの初期化を実施する。
-*/
-public CommentService() {
-	InitApplication application = InitApplication.getInstance();
-	application.init();
+	/**
+	* デフォルトコンストラクタ
+	* アプリケーションの初期化を実施する。
+	*/
+	public CommentService() {
+		InitApplication application = InitApplication.getInstance();
+		application.init();
 
-}
+	}
 
 	public void insert(Comment comment) {
 
@@ -58,30 +58,34 @@ public CommentService() {
 		}
 	}
 
-    public List<UserComment> select() {
+	public List<UserComment> select() {
 
-	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
-        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+		log.info(new Object() {
+		}.getClass().getEnclosingClass().getName() +
+				" : " + new Object() {
+				}.getClass().getEnclosingMethod().getName());
 
-        final int LIMIT_NUM = 1000;
+		final int LIMIT_NUM = 1000;
 
-        Connection connection = null;
-        try {
-            connection = getConnection();
-            List<UserComment> comments = new UserCommentDao().select(connection, LIMIT_NUM);
-            commit(connection);
+		Connection connection = null;
+		try {
+			connection = getConnection();
+			List<UserComment> comments = new UserCommentDao().select(connection, LIMIT_NUM);
+			commit(connection);
 
-            return comments;
-        } catch (RuntimeException e) {
-            rollback(connection);
-		log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
-            throw e;
-        } catch (Error e) {
-            rollback(connection);
-		log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
-            throw e;
-        } finally {
-            close(connection);
-        }
-    }
+			return comments;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			log.log(Level.SEVERE, new Object() {
+			}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			log.log(Level.SEVERE, new Object() {
+			}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
 }

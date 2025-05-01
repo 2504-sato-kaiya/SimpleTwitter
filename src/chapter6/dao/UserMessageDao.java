@@ -54,30 +54,22 @@ public class UserMessageDao {
 			sql.append("FROM messages ");
 			sql.append("INNER JOIN users ");
 			sql.append("ON messages.user_id = users.id ");
+			sql.append("WHERE messages.created_date BETWEEN ? AND ? ");
 			//idがnull以外だったら、バインド変数を準備する
 			if (id != null) {
 
-				sql.append("WHERE users.id = ? ");
-
-			//idがnullだったら、created_dateのバインド変数を準備する
-			}else {
-
-				sql.append("WHERE messages.created_date BETWEEN ? AND ? ");
+				sql.append("AND users.id = ? ");
 
 			}
 
 			sql.append("ORDER BY created_date DESC limit " + num);
 			ps = connection.prepareStatement(sql.toString());
+			ps.setString(1, startDate);
+			ps.setString(2, endDate);
 			//idがnull以外だったら、値をsetする
 			if (id != null) {
 
-				ps.setInt(1, id);
-
-			//idがnullだったら、created_dateのバインド変数を準備する
-			}else {
-
-				ps.setString(1, startDate);
-				ps.setString(2, endDate);
+				ps.setInt(3, id);
 
 			}
 
